@@ -1,9 +1,10 @@
 // ignore_for_file: constant_identifier_names, prefer_final_fields, unused_field
 
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:http/http.dart' as http;
+import 'package:sreporter/utils/markdowns.dart';
 
 class TeleReporter {
   static const int USER_INFO = 0;
@@ -26,6 +27,8 @@ class TeleReporter {
   VoidCallback onSuccess;
   Function(String failMsg) onFailure;
 
+  bool diableWebPagePreview;
+
   TeleReporter({
     required this.botToken,
     required this.targetChat,
@@ -34,29 +37,69 @@ class TeleReporter {
     this.reportSubHeader = '',
     required this.reportMessage,
     this.reportFooter = '',
+    this.diableWebPagePreview = true,
     required this.pkgInfo,
     required this.onSuccess,
     required this.onFailure,
   });
 
-  void sendReport() {
-        if (botToken.isEmpty) { onFailure(_noTokenMsg); return;}
-		 if (targetChat.isEmpty) {onFailure(_noUsernameMsg); return;}
-		 if (!SConnect.isDeviceConnected(context)) onFailure(noInternet);
-		else try {
-            String url = getFinalURL();
-            URL u = new URL(url);
-            SConnect.with((Activity) context)
-                    .callback(new SConnectCallBack() {
-                        @Override public void onSuccess(SResponse response, String tag, Map<String, Object> responseHeaders) {
-                            onSuccess();
-                        }
-
-                        @Override public void onFailure(SResponse response, String tag) {
-                            onFailure(failMsg);
-                        }
-                    })
-                    .url(url).tag("sendTeleReport").get();
-        } catch (MalformedURLException e) { onFailure(malformedUrl); }
+  void report() async {
+    bool internet = await isInternetConnected();
+    if (botToken.isEmpty) {
+      onFailure(_noTokenMsg);
+    } else if (targetChat.isEmpty) {
+      onFailure(_noUsernameMsg);
+    } else if (!internet) {
+      onFailure(_noInternet);
+    } else {
+      try {
+        String url = getFinalURL();
+        Uri u = Uri.parse(url);
+        final response = await http.get(u);
+        if (response.statusCode == 200) {
+          onSuccess();
+        } else {
+          onFailure(_failMsg);
+        }
+      } catch (e) {
+        onFailure(_malformedUrl);
+      }
     }
+  }
+
+  Future<bool> isInternetConnected() async {
+    try {
+      final response = await http.get(Uri.parse('https://www.github.com'));
+      return response.statusCode == 200;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  String getFinalURL() {
+    String finalUrl = "https://api.telegram.org/bot$botToken"
+        "/sendMessage?chat_id=$targetChat"
+        "&text=${Uri.encodeFull(getFinalReport())}";
+
+    if (targetTopic > 0) finalUrl += "&message_thread_id=$targetTopic";
+
+    finalUrl += "&parse_mode=MarkDown&disable_web_page_preview=true";
+
+    return finalUrl;
+  }
+
+  String getFinalReport() {
+    String buffer = '${Bold(reportHeader)}\n';
+    if (reportSubHeader.isNotEmpty) buffer += '$reportSubHeader\n';
+    buffer += '\n${Bold('Message:')}\n';
+    if (reportMessage.isEmpty) {
+      buffer += '$_noBodyMsg\n\n';
+    } else {
+      buffer += '$reportMessage\n\n';
+    }
+    if (reportFooter.isNotEmpty) buffer += "${Bold('More Info:')}\n";
+    buffer += reportFooter;
+
+    return buffer;
+  }
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:sreporter/sreporter.dart';
 import 'package:sreporter/tele_reporter.dart';
@@ -69,12 +71,17 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void set() async {
+  void sendReport() async {
     TeleReporter service = await SReporter.teleReporter(
       botToken: '',
       targetChat: '',
+      targetChatTopic: 1, // optional
       reportHeader: '',
+      reportSubHeader: '', // optional
       reportMessage: '',
+      reportFooter: '', // optional
+      onSuccess: () {},
+      onFailure: (msg) {},
     );
   }
 }
