@@ -5,7 +5,7 @@ class Bold {
 
   @override
   String toString() {
-    return '**$text**';
+    return '<bold>$text</bold>';
   }
 }
 
@@ -16,7 +16,7 @@ class Italic {
 
   @override
   String toString() {
-    return '__${text}__';
+    return '<i>$text</i>';
   }
 }
 
@@ -27,7 +27,7 @@ class StrikeThrough {
 
   @override
   String toString() {
-    return '--$text--';
+    return '<s>$text</s>';
   }
 }
 
@@ -38,6 +38,37 @@ class Spoiler {
 
   @override
   String toString() {
-    return '--$text--';
+    return '||$text||';
+  }
+}
+
+class Underline {
+  final String text;
+
+  Underline(this.text);
+
+  @override
+  String toString() {
+    return '<u>$text</u>';
+  }
+}
+
+class Code {
+  final String text;
+  final String lang;
+
+  Code(this.text, {this.lang = ''});
+
+  @override
+  String toString() {
+    String txt;
+    if (lang.isNotEmpty) {
+      txt = """```$lang
+$text
+```""";
+    } else {
+      txt = "`$text`";
+    }
+    return txt;
   }
 }
