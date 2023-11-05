@@ -7,14 +7,10 @@ class TeleService {
   final String botToken, targetChat;
   int targetTopic;
 
-  String reportMessage = 'Message:\n',
+  String reportMessage,
       reportHeader,
-      reportSubHeader = '',
-      reportFooter = 'More Information:',
-      deviceModel = 'Device model: ',
-      androidVersion = 'SDK version: ',
-      appVersion = '',
-      appName = 'App: ';
+      reportSubHeader,
+      reportFooter;
 
   final String _noTokenMsg = 'NO BOT TOKEN PROVIDED!',
       _noUsernameMsg = 'NO TARGET CHAT USERNAME/ID PROVIDED!',
@@ -23,12 +19,13 @@ class TeleService {
       _noBodyMsg = 'NO REPORT MESSAGE PROVIDED BY THE USER!',
       _noInternet = 'NO INTERNET CONNECTION!';
 
-  TeleService(
-      {required this.botToken,
-      required this.targetChat,
-      this.targetTopic = 0,
-      this.reportHeader = 'A New Report Sent from '});
-
-  // final Context context;
-  // PackageInfo info;
+  TeleService({
+    required this.botToken,
+    required this.targetChat,
+    this.targetTopic = 0,
+    required this.reportHeader,
+    this.reportSubHeader = '',
+    required this.reportMessage,
+    this.reportFooter = '',
+  });
 }
