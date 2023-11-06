@@ -1,7 +1,6 @@
 library sreporter;
 
 import 'dart:ui';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'tele_reporter.dart';
 
 class SReporter {
@@ -16,7 +15,6 @@ class SReporter {
     required VoidCallback onSuccess,
     required Function(String) onFailure,
   }) async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
     return TeleReporter(
       botToken: botToken,
       targetChat: targetChat,
@@ -25,7 +23,6 @@ class SReporter {
       reportSubHeader: reportSubHeader,
       reportMessage: reportMessage,
       reportFooter: reportFooter,
-      pkgInfo: packageInfo,
       onFailure: onFailure,
       onSuccess: onSuccess,
     );

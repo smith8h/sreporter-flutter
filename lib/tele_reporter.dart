@@ -1,11 +1,9 @@
 // ignore_for_file: constant_identifier_names, prefer_final_fields, unused_field
 
-import 'dart:collection';
 import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sreporter/utils/markdowns.dart';
 
 class TeleReporter {
@@ -26,8 +24,6 @@ class TeleReporter {
       _noBodyMsg = 'NO REPORT MESSAGE PROVIDED BY THE USER!',
       _noInternet = 'NO INTERNET CONNECTION!';
 
-  final PackageInfo _pkgInfo;
-
   VoidCallback _onSuccess;
   Function(String failMsg) _onFailure;
 
@@ -42,7 +38,6 @@ class TeleReporter {
     required String reportMessage,
     String reportFooter = '',
     bool disableWebPagePreview = true,
-    required PackageInfo pkgInfo,
     required VoidCallback onSuccess,
     required Function(String failMsg) onFailure,
   })  : _botToken = botToken,
@@ -53,7 +48,6 @@ class TeleReporter {
         _reportMessage = reportMessage,
         _reportFooter = reportFooter,
         _disableWebPagePreview = disableWebPagePreview,
-        _pkgInfo = pkgInfo,
         _onSuccess = onSuccess,
         _onFailure = onFailure;
 
