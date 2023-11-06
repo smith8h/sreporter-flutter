@@ -61,14 +61,8 @@ class Code {
 
   @override
   String toString() {
-    String txt;
-    if (lang.isNotEmpty) {
-      txt = """```$lang
-$text
-```""";
-    } else {
-      txt = "`$text`";
-    }
-    return txt;
+    return lang.isNotEmpty
+        ? '<pre language="$lang">$text</pre>'
+        : '<code>$text</code>';
   }
 }

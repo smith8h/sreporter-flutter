@@ -75,12 +75,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void sendReport() async {
     TeleReporter service = await SReporter.teleReporter(
-      botToken: '1952111437:AAHruEiN5nU1J83PAvJYNtagvbvWsA--6JQ',
-      targetChat: '148880462',
+      botToken: '195211...',
+      targetChat: '14888...', // or mention username '@smith8h'
       reportHeader: 'Report sent from ${Italic('Demo App')}.',
       reportSubHeader:
           Spoiler(Underline('Flutter-Demo').toString()).toString(), // optional
-      reportMessage: 'Custom message',
+      reportMessage: '${Code('Custom.message')}',
       reportFooter: 'Footer...', // optional
       onSuccess: () => print('done!!!!'),
       onFailure: (msg) => print(msg),

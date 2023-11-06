@@ -1,5 +1,7 @@
 // ignore_for_file: constant_identifier_names, prefer_final_fields, unused_field
 
+import 'dart:collection';
+import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -69,7 +71,9 @@ class TeleReporter {
         if (response.statusCode == 200) {
           _onSuccess();
         } else {
-          _onFailure('REPORT SEND FAILED! ERROR: "${response.body}"');
+          var res = jsonDecode(response.body);
+          _onFailure(
+              'REPORT SEND FAILED! ErrorCode: ${res['error_code']}, ErrorMessage: "${res['description']}".');
         }
       } catch (e) {
         _onFailure(_malformedUrl);
