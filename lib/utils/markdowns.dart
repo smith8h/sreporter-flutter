@@ -38,7 +38,7 @@ class Spoiler {
 
   @override
   String toString() {
-    return '||$text||';
+    return '<tg-spoiler>$text</tg-spoiler>';
   }
 }
 
