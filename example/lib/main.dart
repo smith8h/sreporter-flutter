@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:sreporter/sreporter.dart';
 import 'package:sreporter/tele_reporter.dart';
+import 'package:sreporter/utils/markdowns.dart';
 
 void main() {
   runApp(const MyApp());
@@ -44,6 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    sendReport();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -74,9 +76,10 @@ class _MyHomePageState extends State<MyHomePage> {
   void sendReport() async {
     TeleReporter service = await SReporter.teleReporter(
       botToken: '1952111437:AAHruEiN5nU1J83PAvJYNtagvbvWsA--6JQ',
-      targetChat: '@smith8h',
-      reportHeader: 'Report sent from demo app.',
-      reportSubHeader: 'Flutter-Demo', // optional
+      targetChat: '148880462',
+      reportHeader: 'Report sent from ${Italic('Demo App')}.',
+      reportSubHeader:
+          Spoiler(Underline('Flutter-Demo').toString()).toString(), // optional
       reportMessage: 'Custom message',
       reportFooter: 'Footer...', // optional
       onSuccess: () => print('done!!!!'),

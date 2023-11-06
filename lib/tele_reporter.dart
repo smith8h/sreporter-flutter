@@ -20,7 +20,6 @@ class TeleReporter {
 
   final String _noTokenMsg = 'NO BOT TOKEN PROVIDED!',
       _noUsernameMsg = 'NO TARGET CHAT USERNAME/ID PROVIDED!',
-      _failMsg = 'REPORT SEND FAILED! CHECK YOUR INTERNET CONNECTION.',
       _malformedUrl = 'MALFORMED URL! CHECK URL AGAIN.',
       _noBodyMsg = 'NO REPORT MESSAGE PROVIDED BY THE USER!',
       _noInternet = 'NO INTERNET CONNECTION!';
@@ -70,7 +69,7 @@ class TeleReporter {
         if (response.statusCode == 200) {
           _onSuccess();
         } else {
-          _onFailure(_failMsg);
+          _onFailure('REPORT SEND FAILED! ERROR: "${response.body}"');
         }
       } catch (e) {
         _onFailure(_malformedUrl);
@@ -94,7 +93,7 @@ class TeleReporter {
 
     if (_targetTopic > 0) finalUrl += "&message_thread_id=$_targetTopic";
 
-    finalUrl += "&parse_mode=MarkDown&disable_web_page_preview=true";
+    finalUrl += "&parse_mode=HTML&disable_web_page_preview=true";
 
     return finalUrl;
   }

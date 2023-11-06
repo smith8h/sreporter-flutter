@@ -5,7 +5,7 @@ class Bold {
 
   @override
   String toString() {
-    return '<bold>$text</bold>';
+    return '<b>$text</b>';
   }
 }
 
