@@ -2,8 +2,8 @@
 
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:http/http.dart' as http;
 import 'package:sreporter/utils/markdowns.dart';
 
 class TeleReporter {
@@ -53,9 +53,7 @@ class TeleReporter {
       onFailure(_noInternet);
     } else {
       try {
-        String url = getFinalURL();
-        Uri u = Uri.parse(url);
-        final response = await http.get(u);
+        Response response = await get(Uri.parse(getFinalURL()));
         if (response.statusCode == 200) {
           onSuccess();
         } else {
@@ -69,7 +67,7 @@ class TeleReporter {
 
   Future<bool> isInternetConnected() async {
     try {
-      final response = await http.get(Uri.parse('https://www.github.com'));
+      Response response = await get(Uri(scheme: 'https', host: 'github.com'));
       return response.statusCode == 200;
     } catch (e) {
       return false;
