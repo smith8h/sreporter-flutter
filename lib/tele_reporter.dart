@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:sreporter/utils/markdowns.dart';
+import 'package:sreporter/utils/utils.dart';
 
 class TeleReporter {
   static const int USER_INFO = 0;
@@ -52,7 +53,7 @@ class TeleReporter {
         _onFailure = onFailure;
 
   void report() async {
-    bool noInternet = !(await _isInternetConnected());
+    bool noInternet = !(await isInternetConnected());
     if (!noInternet) {
       _onFailure(_noInternet);
     } else if (_targetChat.isEmpty) {
@@ -72,15 +73,6 @@ class TeleReporter {
       } catch (e) {
         _onFailure(_malformedUrl);
       }
-    }
-  }
-
-  Future<bool> _isInternetConnected() async {
-    try {
-      Response response = await get(Uri(scheme: 'https', host: 'github.com'));
-      return response.statusCode == 200;
-    } catch (e) {
-      return false;
     }
   }
 
