@@ -44,13 +44,13 @@ class TeleReporter {
   });
 
   void report() async {
-    bool internet = await isInternetConnected();
-    if (botToken.isEmpty) {
-      onFailure(_noTokenMsg);
+    bool noInternet = !(await isInternetConnected());
+    if (!noInternet) {
+      onFailure(_noInternet);
     } else if (targetChat.isEmpty) {
       onFailure(_noUsernameMsg);
-    } else if (!internet) {
-      onFailure(_noInternet);
+    } else if (botToken.isEmpty) {
+      onFailure(_noTokenMsg);
     } else {
       try {
         Response response = await get(Uri.parse(getFinalURL()));
