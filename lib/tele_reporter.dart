@@ -10,10 +10,13 @@ class TeleReporter {
   static const int USER_INFO = 0;
   static const int CUSTOM = 1;
 
-  final String botToken, targetChat;
-  int targetTopic;
-
-  String reportMessage, reportHeader, reportSubHeader, reportFooter;
+  final String _botToken,
+      _targetChat,
+      _reportMessage,
+      _reportHeader,
+      _reportSubHeader,
+      _reportFooter;
+  int _targetTopic;
 
   final String _noTokenMsg = 'NO BOT TOKEN PROVIDED!',
       _noUsernameMsg = 'NO TARGET CHAT USERNAME/ID PROVIDED!',
@@ -22,50 +25,60 @@ class TeleReporter {
       _noBodyMsg = 'NO REPORT MESSAGE PROVIDED BY THE USER!',
       _noInternet = 'NO INTERNET CONNECTION!';
 
-  final PackageInfo pkgInfo;
+  final PackageInfo _pkgInfo;
 
-  VoidCallback onSuccess;
-  Function(String failMsg) onFailure;
+  VoidCallback _onSuccess;
+  Function(String failMsg) _onFailure;
 
-  bool diableWebPagePreview;
+  bool _disableWebPagePreview;
 
   TeleReporter({
-    required this.botToken,
-    required this.targetChat,
-    this.targetTopic = 0,
-    required this.reportHeader,
-    this.reportSubHeader = '',
-    required this.reportMessage,
-    this.reportFooter = '',
-    this.diableWebPagePreview = true,
-    required this.pkgInfo,
-    required this.onSuccess,
-    required this.onFailure,
-  });
+    required String botToken,
+    required String targetChat,
+    int targetTopic = 0,
+    required String reportHeader,
+    String reportSubHeader = '',
+    required String reportMessage,
+    String reportFooter = '',
+    bool disableWebPagePreview = true,
+    required PackageInfo pkgInfo,
+    required VoidCallback onSuccess,
+    required Function(String failMsg) onFailure,
+  })  : _botToken = botToken,
+        _targetChat = targetChat,
+        _targetTopic = targetTopic,
+        _reportHeader = reportHeader,
+        _reportSubHeader = reportSubHeader,
+        _reportMessage = reportMessage,
+        _reportFooter = reportFooter,
+        _disableWebPagePreview = disableWebPagePreview,
+        _pkgInfo = pkgInfo,
+        _onSuccess = onSuccess,
+        _onFailure = onFailure;
 
   void report() async {
-    bool noInternet = !(await isInternetConnected());
+    bool noInternet = !(await _isInternetConnected());
     if (!noInternet) {
-      onFailure(_noInternet);
-    } else if (targetChat.isEmpty) {
-      onFailure(_noUsernameMsg);
-    } else if (botToken.isEmpty) {
-      onFailure(_noTokenMsg);
+      _onFailure(_noInternet);
+    } else if (_targetChat.isEmpty) {
+      _onFailure(_noUsernameMsg);
+    } else if (_botToken.isEmpty) {
+      _onFailure(_noTokenMsg);
     } else {
       try {
-        Response response = await get(Uri.parse(getFinalURL()));
+        Response response = await get(Uri.parse(_getFinalURL()));
         if (response.statusCode == 200) {
-          onSuccess();
+          _onSuccess();
         } else {
-          onFailure(_failMsg);
+          _onFailure(_failMsg);
         }
       } catch (e) {
-        onFailure(_malformedUrl);
+        _onFailure(_malformedUrl);
       }
     }
   }
 
-  Future<bool> isInternetConnected() async {
+  Future<bool> _isInternetConnected() async {
     try {
       Response response = await get(Uri(scheme: 'https', host: 'github.com'));
       return response.statusCode == 200;
@@ -74,29 +87,29 @@ class TeleReporter {
     }
   }
 
-  String getFinalURL() {
-    String finalUrl = "https://api.telegram.org/bot$botToken"
-        "/sendMessage?chat_id=$targetChat"
-        "&text=${Uri.encodeFull(getFinalReport())}";
+  String _getFinalURL() {
+    String finalUrl = "https://api.telegram.org/bot$_botToken"
+        "/sendMessage?chat_id=$_targetChat"
+        "&text=${Uri.encodeFull(_getFinalReport())}";
 
-    if (targetTopic > 0) finalUrl += "&message_thread_id=$targetTopic";
+    if (_targetTopic > 0) finalUrl += "&message_thread_id=$_targetTopic";
 
     finalUrl += "&parse_mode=MarkDown&disable_web_page_preview=true";
 
     return finalUrl;
   }
 
-  String getFinalReport() {
-    String buffer = '${Bold(reportHeader)}\n';
-    if (reportSubHeader.isNotEmpty) buffer += '$reportSubHeader\n';
+  String _getFinalReport() {
+    String buffer = '${Bold(_reportHeader)}\n';
+    if (_reportSubHeader.isNotEmpty) buffer += '$_reportSubHeader\n';
     buffer += '\n${Bold('Message:')}\n';
-    if (reportMessage.isEmpty) {
+    if (_reportMessage.isEmpty) {
       buffer += '$_noBodyMsg\n\n';
     } else {
-      buffer += '$reportMessage\n\n';
+      buffer += '$_reportMessage\n\n';
     }
-    if (reportFooter.isNotEmpty) buffer += "${Bold('More Info:')}\n";
-    buffer += reportFooter;
+    if (_reportFooter.isNotEmpty) buffer += "${Bold('More Info:')}\n";
+    buffer += _reportFooter;
 
     return buffer;
   }
