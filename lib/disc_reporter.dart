@@ -36,88 +36,82 @@ class DiscReporter {
     bool noInternet = !(await isInternetConnected());
     if (noInternet) {
       _onFailure('NO INTERNET CONNECTION!');
-    } else if (_content.isEmpty) {_onFailure('NO CONTENT PROVIDED!');}
-        else if (_webhook.isEmpty) callback.onFailure(context.getString(R.string.disc_reporter_no_webhook));
-    //     else {
-    //         SConnect connect = SConnect.with((Activity) context).callback(new SConnectCallBack() {
-    //             @Override public void onSuccess(SResponse response, String tag, Map<String, Object> headers) {
-    //                 callback.onSuccess();
-    //             }
+    } else if (_content.isEmpty) {
+      _onFailure('NO CONTENT PROVIDED!');
+    } else if (_webhook.isEmpty) {
+      _onFailure('NO DISCORD WEBHOOK PROVIDED!');
+    } else {
+      params["content"] = _content;
+      params["username"] = _username;
+      params["avatar_url"] = _avatarUrl;
+      params["tts"] = _tts;
 
-    //             @Override public void onFailure(SResponse response, String tag) {
-    //                 callback.onFailure(context.getString(R.string.tele_reporter_failed));
-    //             }
-    //         });
+              if (embeds.isNotEmpty) {
+                  List<Map<String, dynamic>> embedObjects = [];
 
-    //         params.put("content", content);
-    //         params.put("username", username);
-    //         params.put("avatar_url", avatarUrl);
-    //         params.put("tts", tts);
+                  embeds.forEach((embed) {
+                      Map<String, dynamic> embedObject = {};
 
-    //         if (!embeds.isEmpty()) {
-    //             List<HashMap<String, Object>> embedObjects = new ArrayList<>();
+                      embedObject["title"] = embed.title;
+                      embedObject["description"] = embed.description;
+                      embedObject["url"] = embed.url;
 
-    //             embeds.forEach(embed -> {
-    //                 HashMap<String, Object> embedObject = new HashMap<>();
+      //                 DiscEmbed.Footer footer = embed.getFooterEmbed();
+      //                 DiscEmbed.Image image = embed.getImageEmbed();
+      //                 DiscEmbed.Thumbnail thumbnail = embed.getThumbnailEmbed();
+      //                 DiscEmbed.Author author = embed.getAuthorEmbed();
+      //                 List<DiscEmbed.Field> fields = embed.getFields();
 
-    //                 embedObject.put("title", embed.getTitle());
-    //                 embedObject.put("description", embed.getDescription());
-    //                 embedObject.put("url", embed.getURL());
+      //                 if (footer != null) {
+      //                     HashMap<String, Object> jsonFooter = new HashMap<>();
+      //                     jsonFooter.put("text", footer.getText());
+      //                     jsonFooter.put("icon_url", footer.getIconURL());
+      //                     embedObject.put("footer", jsonFooter);
+      //                 }
 
-    //                 DiscEmbed.Footer footer = embed.getFooterEmbed();
-    //                 DiscEmbed.Image image = embed.getImageEmbed();
-    //                 DiscEmbed.Thumbnail thumbnail = embed.getThumbnailEmbed();
-    //                 DiscEmbed.Author author = embed.getAuthorEmbed();
-    //                 List<DiscEmbed.Field> fields = embed.getFields();
+      //                 if (image != null) {
+      //                     HashMap<String, Object> jsonImage = new HashMap<>();
+      //                     jsonImage.put("url", image.getURL());
+      //                     embedObject.put("image", jsonImage);
+      //                 }
 
-    //                 if (footer != null) {
-    //                     HashMap<String, Object> jsonFooter = new HashMap<>();
-    //                     jsonFooter.put("text", footer.getText());
-    //                     jsonFooter.put("icon_url", footer.getIconURL());
-    //                     embedObject.put("footer", jsonFooter);
-    //                 }
+      //                 if (thumbnail != null) {
+      //                     HashMap<String, Object> jsonThumbnail = new HashMap<>();
+      //                     jsonThumbnail.put("url", thumbnail.getURL());
+      //                     embedObject.put("thumbnail", jsonThumbnail);
+      //                 }
 
-    //                 if (image != null) {
-    //                     HashMap<String, Object> jsonImage = new HashMap<>();
-    //                     jsonImage.put("url", image.getURL());
-    //                     embedObject.put("image", jsonImage);
-    //                 }
+      //                 if (author != null) {
+      //                     HashMap<String, Object> jsonAuthor = new HashMap<>();
+      //                     jsonAuthor.put("name", author.getName());
+      //                     jsonAuthor.put("url", author.getURL());
+      //                     jsonAuthor.put("icon_url", author.getIconURL());
+      //                     embedObject.put("author", jsonAuthor);
+      //                 }
 
-    //                 if (thumbnail != null) {
-    //                     HashMap<String, Object> jsonThumbnail = new HashMap<>();
-    //                     jsonThumbnail.put("url", thumbnail.getURL());
-    //                     embedObject.put("thumbnail", jsonThumbnail);
-    //                 }
+      //                 List<HashMap<String, Object>> jsonFields = new ArrayList<>();
+      //                 for (DiscEmbed.Field field : fields) {
+      //                     HashMap<String, Object> jsonField = new HashMap<>();
+      //                     jsonField.put("name", field.getName());
+      //                     jsonField.put("value", field.getValue());
+      //                     jsonField.put("inline", field.isInline());
+      //                     jsonFields.add(jsonField);
+      //                 }
 
-    //                 if (author != null) {
-    //                     HashMap<String, Object> jsonAuthor = new HashMap<>();
-    //                     jsonAuthor.put("name", author.getName());
-    //                     jsonAuthor.put("url", author.getURL());
-    //                     jsonAuthor.put("icon_url", author.getIconURL());
-    //                     embedObject.put("author", jsonAuthor);
-    //                 }
+      //                 embedObject.put("fields", jsonFields.toArray());
+      //                 embedObjects.add(embedObject);
+      //             });
 
-    //                 List<HashMap<String, Object>> jsonFields = new ArrayList<>();
-    //                 for (DiscEmbed.Field field : fields) {
-    //                     HashMap<String, Object> jsonField = new HashMap<>();
-    //                     jsonField.put("name", field.getName());
-    //                     jsonField.put("value", field.getValue());
-    //                     jsonField.put("inline", field.isInline());
-    //                     jsonFields.add(jsonField);
-    //                 }
+      //             params.put("embeds", embedObjects.toArray());
+      //             connect.params(params, SConnect.PARAM);
+      //         }
 
-    //                 embedObject.put("fields", jsonFields.toArray());
-    //                 embedObjects.add(embedObject);
-    //             });
-
-    //             params.put("embeds", embedObjects.toArray());
-    //             connect.params(params, SConnect.PARAM);
-    //         }
-
-    //         headers.put("Content-Type", "application/json");
-    //         headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36");
-    //         connect.headers(headers).tag("SendingDiscordReport").post();
-    //     }
-    // }
+      //         headers.put("Content-Type", "application/json");
+      //         headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36");
+      //         connect.headers(headers).tag("SendingDiscordReport").post();
+      //     }
+      // }
+    }
   }
 }
+  
