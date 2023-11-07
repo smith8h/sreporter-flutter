@@ -26,6 +26,12 @@ class DiscEmbed {
         _footer = footerEmbed,
         _fields = fieldEmbeds;
 
+  String get title => _title;
+
+  String get description => _description;
+
+  String get url => _url;
+
   FooterEmbed? get footerEmbed => _footer;
 
   List<FieldEmbed>? get fieldEmbeds => _fields;
