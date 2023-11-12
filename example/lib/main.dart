@@ -95,8 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ).report();
 
     SReporter.discReporter(
-      webhook:
-          'https://discord.com/api/webhooks/1171370013236674570/Cep34E4Lee61-t7smbOlgy3JsCXgJiluoaYkYuxVk-MCAyoHCOrCK53CiPoWOypn0L07',
+      webhook: 'https://discord.com/api/webhooks/1171...',
       contentMessage:
           'Content Message with ${DiscLink('linked text', 't.me/smith8h')}...',
       onSucess: () {

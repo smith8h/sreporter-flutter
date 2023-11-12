@@ -1,5 +1,8 @@
 import 'package:http/http.dart';
 
+/// check wheather the device is connected to the internet or not.
+///
+/// retrun `true` if internet is available.
 Future<bool> isInternetConnected() async {
   try {
     Response response = await get(Uri.parse('https://telegram.org/'));
@@ -9,9 +12,11 @@ Future<bool> isInternetConnected() async {
   }
 }
 
+/// Make a bold markdown text.
 class TeleBold {
   final String text;
 
+  /// Make a bold markdown text.
   TeleBold(this.text);
 
   @override
@@ -20,9 +25,11 @@ class TeleBold {
   }
 }
 
+/// Make an italics markdown text.
 class TeleItalics {
   final String text;
 
+  /// Make an italics markdown text.
   TeleItalics(this.text);
 
   @override
@@ -31,9 +38,11 @@ class TeleItalics {
   }
 }
 
+/// Make a strike through markdown text.
 class TeleStrikeThrough {
   final String text;
 
+  /// Make a strike through markdown text.
   TeleStrikeThrough(this.text);
 
   @override
@@ -42,9 +51,11 @@ class TeleStrikeThrough {
   }
 }
 
+/// Make a spoiler markdown text.
 class TeleSpoiler {
   final String text;
 
+  /// Make a spoiler markdown text.
   TeleSpoiler(this.text);
 
   @override
@@ -53,9 +64,11 @@ class TeleSpoiler {
   }
 }
 
+/// Make an underline markdown text.
 class TeleUnderline {
   final String text;
 
+  /// Make an underline markdown text.
   TeleUnderline(this.text);
 
   @override
@@ -64,10 +77,12 @@ class TeleUnderline {
   }
 }
 
+/// Make a code markdown text.
 class TeleCode {
   final String text;
   final String lang;
 
+  /// Make a code markdown text.
   TeleCode(this.text, {this.lang = ''});
 
   @override
@@ -78,9 +93,11 @@ class TeleCode {
   }
 }
 
+/// Make an italics markdown text.
 class DiscItalics {
   final String text;
 
+  /// Make an italics markdown text.
   DiscItalics(this.text);
 
   @override
@@ -89,9 +106,11 @@ class DiscItalics {
   }
 }
 
+/// Make an underline markdown text.
 class DiscUnderline {
   final String text;
 
+  /// Make an underline markdown text.
   DiscUnderline(this.text);
 
   @override
@@ -100,9 +119,11 @@ class DiscUnderline {
   }
 }
 
+/// Make a bold markdown text.
 class DiscBold {
   final String text;
 
+  /// Make a bold markdown text.
   DiscBold(this.text);
 
   @override
@@ -111,9 +132,11 @@ class DiscBold {
   }
 }
 
+/// Make a strike through markdown text.
 class DiscStrikeThrough {
   final String text;
 
+  /// Make a strike through markdown text.
   DiscStrikeThrough(this.text);
 
   @override
@@ -122,10 +145,12 @@ class DiscStrikeThrough {
   }
 }
 
+/// Make a header markdown text.
 class DiscHeader {
   final String text;
   final int type;
 
+  /// Make a header markdown text.
   DiscHeader(this.text, {this.type = 1});
 
   @override
@@ -138,9 +163,11 @@ class DiscHeader {
   }
 }
 
+/// Make a link markdown text.
 class DiscLink {
   final String text, link;
 
+  /// Make a link markdown text.
   DiscLink(this.text, this.link);
 
   @override
@@ -152,10 +179,12 @@ class DiscLink {
   }
 }
 
+/// Make a list item markdown text.
 class DiscListItem {
   final String text;
   final bool indent;
 
+  /// Make a list item markdown text.
   DiscListItem(this.text, {this.indent = false});
 
   @override
@@ -165,10 +194,12 @@ class DiscListItem {
   }
 }
 
+/// Make a code markdown text.
 class DiscCode {
   final String text;
   final bool multiline;
 
+  /// Make a code markdown text.
   DiscCode(this.text, {this.multiline = false});
 
   @override
@@ -178,10 +209,12 @@ class DiscCode {
   }
 }
 
+/// Make a block qoutes markdown text.
 class DiscBlockQuote {
   final String text;
   final bool wholeMsg;
 
+  /// Make a block qoutes markdown text.
   DiscBlockQuote(this.text, {this.wholeMsg = false});
 
   @override
@@ -190,7 +223,6 @@ class DiscBlockQuote {
     return '$code$text';
   }
 }
-
 
 // class DiscEmbed {
 //   final String _title, _description, _url;

@@ -5,12 +5,9 @@ version: 1.0.0
 repository: https://github.com/smith8h/sreporter-flutter
 
 topics:
-  - reports
-  - dart
-  - tools
   - discord
   - telegram
-  - flutter
+  - reports
   - logger
   - messages
 

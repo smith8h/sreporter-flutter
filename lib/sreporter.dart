@@ -5,6 +5,7 @@ import 'package:sreporter/disc_reporter.dart';
 import 'tele_reporter.dart';
 
 class SReporter {
+  /// use the telegram service to send reports.
   static TeleReporter teleReporter({
     required String botToken,
     required String targetChat,
@@ -29,6 +30,7 @@ class SReporter {
     );
   }
 
+  /// use the telegram service to send reports.
   static DiscReporter discReporter({
     required String webhook,
     required String contentMessage,
