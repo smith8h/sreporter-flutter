@@ -89,15 +89,15 @@ class TeleReporter {
   }
 
   String _getFinalReport() {
-    String buffer = '${Bold(_reportHeader)}\n';
+    String buffer = '${TeleBold(_reportHeader)}\n';
     if (_reportSubHeader.isNotEmpty) buffer += '$_reportSubHeader\n';
-    buffer += '\n${Bold('Message:')}\n';
+    buffer += '\n${TeleBold('Message:')}\n';
     if (_reportMessage.isEmpty) {
       buffer += '$_noBodyMsg\n\n';
     } else {
       buffer += '$_reportMessage\n\n';
     }
-    if (_reportFooter.isNotEmpty) buffer += "${Bold('More Info:')}\n";
+    if (_reportFooter.isNotEmpty) buffer += "${TeleBold('More Info:')}\n";
     buffer += _reportFooter;
 
     return buffer;

@@ -8,7 +8,7 @@ import 'package:sreporter/utils/utils.dart';
 class DiscReporter {
   final String _webhook, _content, _username, _avatarUrl;
   final bool _tts;
-  final List<DiscEmbed> _embeds;
+  // final List<DiscEmbed> _embeds;
   final VoidCallback _onSuccess;
   final Function(String failMsg) _onFailure;
 
@@ -19,7 +19,7 @@ class DiscReporter {
     String reportUserIcon =
         'https://te.legra.ph/file/7735c9a6b574efcb10ae4.jpg',
     bool tts = false,
-    List<DiscEmbed> embeds = const [],
+    // List<DiscEmbed> embeds = const [],
     required VoidCallback onSuccess,
     required Function(String failMsg) onFaiure,
   })  : _webhook = webhook,
@@ -28,8 +28,8 @@ class DiscReporter {
         _avatarUrl = reportUserIcon,
         _tts = tts,
         _onSuccess = onSuccess,
-        _onFailure = onFaiure,
-        _embeds = embeds;
+        _onFailure = onFaiure;
+  // _embeds = embeds;
 
   void report() async {
     bool internet = await isInternetConnected();

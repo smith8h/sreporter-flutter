@@ -39,7 +39,7 @@ class SReporter {
     String reportUserIcon =
         "https://te.legra.ph/file/7735c9a6b574efcb10ae4.jpg",
     bool tts = false,
-    List<DiscEmbed> embeds = const [],
+    // List<DiscEmbed> embeds = const [],
   }) {
     return DiscReporter(
       webhook: webhook,
@@ -49,7 +49,7 @@ class SReporter {
       reportUserName: reportUserName,
       reportUserIcon: reportUserIcon,
       tts: tts,
-      embeds: embeds,
+      // embeds: embeds,
     );
   }
 }

@@ -75,12 +75,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void sendReport() {
     SReporter.teleReporter(
-      // TODO: remove token & id before commit.
-      botToken: '1952111437:AAHruEiN5nU1J83PAvJYNtagvbvWsA--6JQ',
-      targetChat: '148880462', // or mention username '@smith8h'
-      reportHeader: 'Report sent from ${Italic('Demo App')}.',
-      reportSubHeader: '${Spoiler('${Underline('Flutter-Demo')}')}', // optional
-      reportMessage: '${Code('Custom.message')}',
+      botToken: '195211143...',
+      targetChat: '14888...', // or mention username '@smith8h'
+      reportHeader: 'Report sent from ${TeleItalic('Demo App')}.',
+      reportSubHeader: '${TeleSpoiler('${TeleUnderline('Flutter-Demo')}')}', // optional
+      reportMessage: '${TeleCode('Custom.message')}',
       reportFooter: 'Footer...', // optional
       onSuccess: () {
         if (kDebugMode) {
@@ -95,12 +94,11 @@ class _MyHomePageState extends State<MyHomePage> {
     ).report();
 
     SReporter.discReporter(
-      webhook: // TODO: remove webhook before commit.
-          'https://discord.com/api/webhooks/1171370013236674570/Cep34E4Lee61-t7smbOlgy3JsCXgJiluoaYkYuxVk-MCAyoHCOrCK53CiPoWOypn0L07',
-      contentMessage: 'Content Message...',
+      webhook: 'https://discord.com/api/webhooks/1171370013236674570/Cep34E4Lee61-t7smbOlgy3JsCXgJiluoaYkYuxVk-MCAyoHCOrCK53CiPoWOypn0L07',
+      contentMessage: 'Content Message with ${TeleSpoiler('spoiler text')}...',
       onSucess: () {
         if (kDebugMode) {
-          print('disc ==== done!!!!!');
+          print('disc ==== done!!!!');
         }
       },
       onFailure: (failMsg) {
@@ -108,64 +106,6 @@ class _MyHomePageState extends State<MyHomePage> {
           print('disc ==== $failMsg');
         }
       },
-      embeds: [
-        DiscEmbed(
-          title: 'title',
-          description: 'description',
-          url: 'url',
-          color: 0xff6a87e3,
-          author: AuthorEmbed(
-            name: "Author smith8h",
-            url: "https://t.me/smithdev",
-            iconUrl: "https://te.legra.ph/file/e86668a3699571a74c411.png",
-          ),
-          image: ImageEmbed(
-              url: "https://te.legra.ph/file/e86668a3699571a74c411.png",
-              width: 128,
-              height: 128),
-          thumbnail: ThumbnailEmbed(
-              url: "https://te.legra.ph/file/e86668a3699571a74c411.png",
-              width: 40,
-              height: 40),
-          inlineFields: [
-            FieldEmbed(name: 'name', value: 'value'),
-            FieldEmbed(name: 'name', value: 'value'),
-          ],
-          footer: FooterEmbed(
-            text: "footer embed",
-            iconUrl: "https://te.legra.ph/file/e86668a3699571a74c411.png",
-          ),
-          timestamp: TimestampEmbed(timestamp: DateTime.now()),
-        ),
-        DiscEmbed(
-          title: 'title',
-          description: 'description',
-          url: 'url',
-          color: 0xff6a87e3,
-          author: AuthorEmbed(
-            name: "Author smith8h",
-            url: "https://t.me/smithdev",
-            iconUrl: "https://te.legra.ph/file/e86668a3699571a74c411.png",
-          ),
-          image: ImageEmbed(
-              url: "https://te.legra.ph/file/e86668a3699571a74c411.png",
-              width: 128,
-              height: 128),
-          thumbnail: ThumbnailEmbed(
-              url: "https://te.legra.ph/file/e86668a3699571a74c411.png",
-              width: 40,
-              height: 40),
-          inlineFields: [
-            FieldEmbed(name: 'name', value: 'value'),
-            FieldEmbed(name: 'name', value: 'value'),
-          ],
-          footer: FooterEmbed(
-            text: "footer embed",
-            iconUrl: "https://te.legra.ph/file/e86668a3699571a74c411.png",
-          ),
-          timestamp: TimestampEmbed(timestamp: DateTime.now()),
-        ),
-      ],
     ).report();
   }
 }
