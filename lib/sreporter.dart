@@ -2,7 +2,6 @@ library sreporter;
 
 import 'package:flutter/foundation.dart';
 import 'package:sreporter/disc_reporter.dart';
-import 'package:sreporter/utils/utils.dart';
 import 'tele_reporter.dart';
 
 class SReporter {
