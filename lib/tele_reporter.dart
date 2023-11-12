@@ -2,9 +2,9 @@
 
 import 'dart:convert';
 import 'dart:ui';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:sreporter/utils/markdowns.dart';
 import 'package:sreporter/utils/utils.dart';
 
 class TeleReporter {
@@ -53,8 +53,8 @@ class TeleReporter {
         _onFailure = onFailure;
 
   void report() async {
-    bool noInternet = !(await isInternetConnected());
-    if (!noInternet) {
+    bool internet = await isInternetConnected();
+    if (!internet) {
       _onFailure(_noInternet);
     } else if (_targetChat.isEmpty) {
       _onFailure(_noUsernameMsg);
@@ -68,7 +68,7 @@ class TeleReporter {
         } else {
           var res = jsonDecode(response.body);
           _onFailure(
-              'REPORT SEND FAILED! ErrorCode: ${res['error_code']}, ErrorMessage: "${res['description']}".');
+              'TELEGRAM REPORT FAILED TO SEND! ErrorCode: ${res['error_code']}, ErrorMessage: "${res['description']}".');
         }
       } catch (e) {
         _onFailure(_malformedUrl);

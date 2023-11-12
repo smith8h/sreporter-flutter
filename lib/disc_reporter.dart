@@ -1,117 +1,131 @@
+// ignore_for_file: unused_local_variable, avoid_function_literals_in_foreach_calls, unused_field
+
+import 'dart:convert';
 import 'dart:ui';
-import 'package:sreporter/utils/disc_embeds.dart';
+import 'package:http/http.dart';
 import 'package:sreporter/utils/utils.dart';
 
 class DiscReporter {
   final String _webhook, _content, _username, _avatarUrl;
-  bool _tts;
-  final List<DiscEmbed> embeds = [];
-  VoidCallback _onSuccess;
-  Function(String failMsg) _onFailure;
-  Map<String, dynamic> headers = {};
-  Map<String, dynamic> params = {};
+  final bool _tts;
+  final List<DiscEmbed> _embeds;
+  final VoidCallback _onSuccess;
+  final Function(String failMsg) _onFailure;
 
   DiscReporter({
     required String webhook,
     required String content,
     String reportUserName = 'SReporter',
-    String reportUserAvatar =
-        "https://te.legra.ph/file/7735c9a6b574efcb10ae4.jpg",
+    String reportUserIcon =
+        'https://te.legra.ph/file/7735c9a6b574efcb10ae4.jpg',
     bool tts = false,
+    List<DiscEmbed> embeds = const [],
     required VoidCallback onSuccess,
     required Function(String failMsg) onFaiure,
   })  : _webhook = webhook,
         _content = content,
         _username = reportUserName,
-        _avatarUrl = reportUserAvatar,
+        _avatarUrl = reportUserIcon,
         _tts = tts,
         _onSuccess = onSuccess,
-        _onFailure = onFaiure;
+        _onFailure = onFaiure,
+        _embeds = embeds;
 
-  void addEmbed(DiscEmbed embed) {
-    embeds.add(embed);
-  }
-
-  void sendReport() async {
-    bool noInternet = !(await isInternetConnected());
-    if (noInternet) {
+  void report() async {
+    bool internet = await isInternetConnected();
+    if (!internet) {
       _onFailure('NO INTERNET CONNECTION!');
     } else if (_content.isEmpty) {
-      _onFailure('NO CONTENT PROVIDED!');
+      _onFailure('NO REPORT CONTENT PROVIDED!');
     } else if (_webhook.isEmpty) {
       _onFailure('NO DISCORD WEBHOOK PROVIDED!');
     } else {
-      params["content"] = _content;
-      params["username"] = _username;
-      params["avatar_url"] = _avatarUrl;
-      params["tts"] = _tts;
+      final Map<String, dynamic> params = {
+        'content': _content,
+        'username': _username,
+        'avatar_url': _avatarUrl,
+        'tts': _tts,
+        // 'embeds': buildEmbedObjects(_embeds),
+      };
 
-              if (embeds.isNotEmpty) {
-                  List<Map<String, dynamic>> embedObjects = [];
+      final Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML] like Gecko) Chrome/97.0.4692.99 Safari/537.36',
+      };
 
-                  embeds.forEach((embed) {
-                      Map<String, dynamic> embedObject = {};
-
-                      embedObject["title"] = embed.title;
-                      embedObject["description"] = embed.description;
-                      embedObject["url"] = embed.url;
-
-      //                 DiscEmbed.Footer footer = embed.getFooterEmbed();
-      //                 DiscEmbed.Image image = embed.getImageEmbed();
-      //                 DiscEmbed.Thumbnail thumbnail = embed.getThumbnailEmbed();
-      //                 DiscEmbed.Author author = embed.getAuthorEmbed();
-      //                 List<DiscEmbed.Field> fields = embed.getFields();
-
-      //                 if (footer != null) {
-      //                     HashMap<String, Object> jsonFooter = new HashMap<>();
-      //                     jsonFooter.put("text", footer.getText());
-      //                     jsonFooter.put("icon_url", footer.getIconURL());
-      //                     embedObject.put("footer", jsonFooter);
-      //                 }
-
-      //                 if (image != null) {
-      //                     HashMap<String, Object> jsonImage = new HashMap<>();
-      //                     jsonImage.put("url", image.getURL());
-      //                     embedObject.put("image", jsonImage);
-      //                 }
-
-      //                 if (thumbnail != null) {
-      //                     HashMap<String, Object> jsonThumbnail = new HashMap<>();
-      //                     jsonThumbnail.put("url", thumbnail.getURL());
-      //                     embedObject.put("thumbnail", jsonThumbnail);
-      //                 }
-
-      //                 if (author != null) {
-      //                     HashMap<String, Object> jsonAuthor = new HashMap<>();
-      //                     jsonAuthor.put("name", author.getName());
-      //                     jsonAuthor.put("url", author.getURL());
-      //                     jsonAuthor.put("icon_url", author.getIconURL());
-      //                     embedObject.put("author", jsonAuthor);
-      //                 }
-
-      //                 List<HashMap<String, Object>> jsonFields = new ArrayList<>();
-      //                 for (DiscEmbed.Field field : fields) {
-      //                     HashMap<String, Object> jsonField = new HashMap<>();
-      //                     jsonField.put("name", field.getName());
-      //                     jsonField.put("value", field.getValue());
-      //                     jsonField.put("inline", field.isInline());
-      //                     jsonFields.add(jsonField);
-      //                 }
-
-      //                 embedObject.put("fields", jsonFields.toArray());
-      //                 embedObjects.add(embedObject);
-      //             });
-
-      //             params.put("embeds", embedObjects.toArray());
-      //             connect.params(params, SConnect.PARAM);
-      //         }
-
-      //         headers.put("Content-Type", "application/json");
-      //         headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36");
-      //         connect.headers(headers).tag("SendingDiscordReport").post();
-      //     }
-      // }
+      Response response = await post(Uri.parse(_webhook),
+          headers: headers, body: jsonEncode(params));
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        _onSuccess();
+      } else {
+        _onFailure(
+            'DISCORD REPORT FAILED TO SEND! ErrorCode: ${response.statusCode}, ErrorMessage: "${response.body}".');
+      }
     }
   }
+
+  // buildEmbedObjects(List<DiscEmbed> embeds) {
+  //   var embedObjects = [];
+
+  //   for (DiscEmbed embed in embeds) {
+  //     FooterEmbed? footer = embed.footerEmbed;
+  //     ImageEmbed? image = embed.imageEmbed;
+  //     ThumbnailEmbed? thumbnail = embed.thumbnailEmbed;
+  //     AuthorEmbed? author = embed.authorEmbed;
+  //     List<FieldEmbed>? fields = embed.fieldEmbeds;
+  //     TimestampEmbed? timestamp = embed.timestamp;
+
+  //     Map<String, Object> embedObject = {
+  //       'type': 'rich',
+  //       'title': embed.title,
+  //       'description': embed.description,
+  //       'url': embed.url,
+  //       'color': embed.color,
+  //       'footer': footer != null
+  //           ? {
+  //               'text': footer.text,
+  //               'icon_url': footer.iconURL,
+  //             }
+  //           : {},
+  //       'image': image != null
+  //           ? {
+  //               'url': image.url,
+  //               'height': image.height,
+  //               'width': image.width,
+  //             }
+  //           : {},
+  //       'thumbnail': thumbnail != null
+  //           ? {
+  //               'url': thumbnail.url,
+  //               'height': thumbnail.height,
+  //               'width': thumbnail.width,
+  //             }
+  //           : {},
+  //       'author': author != null
+  //           ? {
+  //               'name': author.name,
+  //               'url': author.url,
+  //               'icon_url': author.iconURL,
+  //             }
+  //           : {},
+  //       'timestamp': timestamp != null ? timestamp.timestamp : '',
+  //     };
+
+  //     var jsonFields = [];
+  //     fields?.forEach((field) {
+  //       var jsonField = {
+  //         'name': field.name,
+  //         'value': field.value,
+  //         'inline': field.inline,
+  //       };
+  //       jsonFields.add(jsonField);
+  //     });
+  //     embedObject['fields'] = jsonFields;
+
+  //     embedObjects.add(embedObject);
+  //   }
+
+  //   return embedObjects;
+  // }
 }
-  
