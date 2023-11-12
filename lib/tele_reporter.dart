@@ -2,9 +2,10 @@
 
 import 'dart:convert';
 import 'dart:ui';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:sreporter/utils/markdowns.dart';
+import 'package:sreporter/utils/utils.dart';
 
 class TeleReporter {
   static const int USER_INFO = 0;
@@ -52,8 +53,8 @@ class TeleReporter {
         _onFailure = onFailure;
 
   void report() async {
-    bool noInternet = !(await _isInternetConnected());
-    if (!noInternet) {
+    bool internet = await isInternetConnected();
+    if (!internet) {
       _onFailure(_noInternet);
     } else if (_targetChat.isEmpty) {
       _onFailure(_noUsernameMsg);
@@ -67,20 +68,11 @@ class TeleReporter {
         } else {
           var res = jsonDecode(response.body);
           _onFailure(
-              'REPORT SEND FAILED! ErrorCode: ${res['error_code']}, ErrorMessage: "${res['description']}".');
+              'TELEGRAM REPORT FAILED TO SEND! ErrorCode: ${res['error_code']}, ErrorMessage: "${res['description']}".');
         }
       } catch (e) {
         _onFailure(_malformedUrl);
       }
-    }
-  }
-
-  Future<bool> _isInternetConnected() async {
-    try {
-      Response response = await get(Uri(scheme: 'https', host: 'github.com'));
-      return response.statusCode == 200;
-    } catch (e) {
-      return false;
     }
   }
 
@@ -97,15 +89,15 @@ class TeleReporter {
   }
 
   String _getFinalReport() {
-    String buffer = '${Bold(_reportHeader)}\n';
+    String buffer = '${TeleBold(_reportHeader)}\n';
     if (_reportSubHeader.isNotEmpty) buffer += '$_reportSubHeader\n';
-    buffer += '\n${Bold('Message:')}\n';
+    buffer += '\n${TeleBold('Message:')}\n';
     if (_reportMessage.isEmpty) {
       buffer += '$_noBodyMsg\n\n';
     } else {
       buffer += '$_reportMessage\n\n';
     }
-    if (_reportFooter.isNotEmpty) buffer += "${Bold('More Info:')}\n";
+    if (_reportFooter.isNotEmpty) buffer += "${TeleBold('More Info:')}\n";
     buffer += _reportFooter;
 
     return buffer;

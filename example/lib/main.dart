@@ -1,9 +1,9 @@
 // ignore_for_file: unused_local_variable
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sreporter/sreporter.dart';
-import 'package:sreporter/tele_reporter.dart';
-import 'package:sreporter/utils/markdowns.dart';
+import 'package:sreporter/utils/utils.dart';
 
 void main() {
   runApp(const MyApp());
@@ -73,18 +73,42 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void sendReport() async {
-    TeleReporter service = await SReporter.teleReporter(
-      botToken: '195211...',
+  void sendReport() {
+    SReporter.teleReporter(
+      botToken: '195211143...',
       targetChat: '14888...', // or mention username '@smith8h'
-      reportHeader: 'Report sent from ${Italic('Demo App')}.',
+      reportHeader: 'Report sent from ${TeleItalics('Demo App')}.',
       reportSubHeader:
-          Spoiler(Underline('Flutter-Demo').toString()).toString(), // optional
-      reportMessage: '${Code('Custom.message')}',
+          '${TeleSpoiler('${TeleUnderline('Flutter-Demo')}')}', // optional
+      reportMessage: '${TeleCode('Custom.message')}',
       reportFooter: 'Footer...', // optional
-      onSuccess: () => print('done!!!!'),
-      onFailure: (msg) => print(msg),
-    );
-    service.report();
+      onSuccess: () {
+        if (kDebugMode) {
+          print('tele ==== done!!!!');
+        }
+      },
+      onFailure: (msg) {
+        if (kDebugMode) {
+          print('tele ==== $msg');
+        }
+      },
+    ).report();
+
+    SReporter.discReporter(
+      webhook:
+          'https://discord.com/api/webhooks/1171370013236674570/Cep34E4Lee61-t7smbOlgy3JsCXgJiluoaYkYuxVk-MCAyoHCOrCK53CiPoWOypn0L07',
+      contentMessage:
+          'Content Message with ${DiscLink('linked text', 't.me/smith8h')}...',
+      onSucess: () {
+        if (kDebugMode) {
+          print('disc ==== done!!!!');
+        }
+      },
+      onFailure: (failMsg) {
+        if (kDebugMode) {
+          print('disc ==== $failMsg');
+        }
+      },
+    ).report();
   }
 }
