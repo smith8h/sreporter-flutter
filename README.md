@@ -45,7 +45,7 @@ Use:
     TeleUnderline(' text ').toString();
     TeleSpoiler(' text ').toString();
     TeleStrikeThrough(' text ').toString();
-    TeleItalic(' text ').toString();
+    TeleItalics(' text ').toString();
     TeleBold(' text ').toString();
 ```
 
@@ -80,12 +80,17 @@ Discord report supports markdown elements within its header ande content.
 Use:
 
 ```dart
-    DiscCode('// Code...', lang: 'java').toString(); // lang is optional
+    DiscCode('// Code...', multiline: true).toString(); // multiline is false by default.
     DiscUnderline(' text ').toString();
     DiscSpoiler(' text ').toString();
     DiscStrikeThrough(' text ').toString();
-    DiscItalic(' text ').toString();
+    DiscItalics(' text ').toString();
     DiscBold(' text ').toString();
+    DiscHeader(' text ', type: 1).toString(); // type represents header degree h1, h2, h3...
+    DiscLink('text', 'url').toString();
+    DiscListItem('text', indent: true).toString(); // indent to make the list item belongs to secondary list.
+    DiscBlockQuote('text', wholeMsg: true).toString(); // wholeMsg to set the block qoute to single line or whole message.
+
 ```
 
 Whole Code:
@@ -93,7 +98,7 @@ Whole Code:
 ```dart
     SReporter.discReporter(
       webhook: 'https://discord.com/api/webhooks/11...',
-      contentMessage: 'Content Message with ${DiscSpoiler('spoiler text')}...',
+      contentMessage: 'Content Message with ${DiscBold('spoiler text')}...',
       onSucess: () {
         // on success to send the report
       },

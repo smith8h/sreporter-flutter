@@ -77,8 +77,9 @@ class _MyHomePageState extends State<MyHomePage> {
     SReporter.teleReporter(
       botToken: '195211143...',
       targetChat: '14888...', // or mention username '@smith8h'
-      reportHeader: 'Report sent from ${TeleItalic('Demo App')}.',
-      reportSubHeader: '${TeleSpoiler('${TeleUnderline('Flutter-Demo')}')}', // optional
+      reportHeader: 'Report sent from ${TeleItalics('Demo App')}.',
+      reportSubHeader:
+          '${TeleSpoiler('${TeleUnderline('Flutter-Demo')}')}', // optional
       reportMessage: '${TeleCode('Custom.message')}',
       reportFooter: 'Footer...', // optional
       onSuccess: () {
@@ -94,8 +95,10 @@ class _MyHomePageState extends State<MyHomePage> {
     ).report();
 
     SReporter.discReporter(
-      webhook: 'https://discord.com/api/webhooks/1171370013236674570/Cep34E4Lee61-t7smbOlgy3JsCXgJiluoaYkYuxVk-MCAyoHCOrCK53CiPoWOypn0L07',
-      contentMessage: 'Content Message with ${TeleSpoiler('spoiler text')}...',
+      webhook:
+          'https://discord.com/api/webhooks/1171370013236674570/Cep34E4Lee61-t7smbOlgy3JsCXgJiluoaYkYuxVk-MCAyoHCOrCK53CiPoWOypn0L07',
+      contentMessage:
+          'Content Message with ${DiscLink('linked text', 't.me/smith8h')}...',
       onSucess: () {
         if (kDebugMode) {
           print('disc ==== done!!!!');

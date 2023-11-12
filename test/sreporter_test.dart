@@ -7,7 +7,7 @@ void main() {
     SReporter.teleReporter(
       botToken: '195211143...',
       targetChat: '14888...', // or mention username '@smith8h'
-      reportHeader: 'Report sent from ${TeleItalic('Demo App')}.',
+      reportHeader: 'Report sent from ${TeleItalics('Demo App')}.',
       reportSubHeader:
           '${TeleSpoiler('${TeleUnderline('Flutter-Demo')}')}', // optional
       reportMessage: '${TeleCode('Custom.message')}',

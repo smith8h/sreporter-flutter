@@ -20,10 +20,10 @@ class TeleBold {
   }
 }
 
-class TeleItalic {
+class TeleItalics {
   final String text;
 
-  TeleItalic(this.text);
+  TeleItalics(this.text);
 
   @override
   String toString() {
@@ -77,6 +77,120 @@ class TeleCode {
         : '<code>$text</code>';
   }
 }
+
+class DiscItalics {
+  final String text;
+
+  DiscItalics(this.text);
+
+  @override
+  String toString() {
+    return '*$text*';
+  }
+}
+
+class DiscUnderline {
+  final String text;
+
+  DiscUnderline(this.text);
+
+  @override
+  String toString() {
+    return '__${text}__';
+  }
+}
+
+class DiscBold {
+  final String text;
+
+  DiscBold(this.text);
+
+  @override
+  String toString() {
+    return '**$text**';
+  }
+}
+
+class DiscStrikeThrough {
+  final String text;
+
+  DiscStrikeThrough(this.text);
+
+  @override
+  String toString() {
+    return '~~$text~~';
+  }
+}
+
+class DiscHeader {
+  final String text;
+  final int type;
+
+  DiscHeader(this.text, {this.type = 1});
+
+  @override
+  String toString() {
+    String header = '';
+    for (int i = 0; i < type; i++) {
+      header += '#';
+    }
+    return '$header $text';
+  }
+}
+
+class DiscLink {
+  final String text, link;
+
+  DiscLink(this.text, this.link);
+
+  @override
+  String toString() {
+    String url = link.startsWith('https://')
+        ? link
+        : (link.startsWith('http://') ? link : 'https://$link');
+    return '[$text]($url)';
+  }
+}
+
+class DiscListItem {
+  final String text;
+  final bool indent;
+
+  DiscListItem(this.text, {this.indent = false});
+
+  @override
+  String toString() {
+    String ind = indent ? ' ' : '';
+    return '$ind- $text';
+  }
+}
+
+class DiscCode {
+  final String text;
+  final bool multiline;
+
+  DiscCode(this.text, {this.multiline = false});
+
+  @override
+  String toString() {
+    String code = multiline ? '```' : '`';
+    return '$code$text$code';
+  }
+}
+
+class DiscBlockQuote {
+  final String text;
+  final bool wholeMsg;
+
+  DiscBlockQuote(this.text, {this.wholeMsg = false});
+
+  @override
+  String toString() {
+    String code = wholeMsg ? '>>>' : '>';
+    return '$code$text';
+  }
+}
+
 
 // class DiscEmbed {
 //   final String _title, _description, _url;
